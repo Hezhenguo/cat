@@ -1,0 +1,35 @@
+function animate(elem,attr,time,callback){
+			clearInterval(elem.timer);
+			elem.timer = setInterval(function(){
+				var bStop = true;
+				for(var prop in attr){
+					var current = parseInt(getSytle(elem,prop));
+					if(prop == 'opacity'){
+						current = parseInt(getSytle(elem,prop)*100);
+					}
+					var speed = (attr[prop] - current)/8;
+					speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+					if(current != attr[prop]){
+						bStop = false;
+					} 
+					if(prop == 'opacity'){
+						elem.style.opacity = (current + speed)/100;
+						elem.style.filter = 'alpha(opacity =' + (current + speed) + ')';
+						console.log('111');
+					}else{
+						elem.style[prop] = current + speed + 'px';
+					}
+				}
+				if(bStop){
+					clearInterval(elem.timer);
+					callback && callback();
+				}
+			},time);
+		}
+		function getSytle(elem,attr){
+			if(elem.currentStyle){
+				return elem.currentStyle[attr];
+			}else{
+				return getComputedStyle(elem,false)[attr];
+			}
+		}
